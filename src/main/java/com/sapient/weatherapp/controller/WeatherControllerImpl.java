@@ -12,16 +12,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/v1")
 @Slf4j
-public class WeatherControllerImpl implements WeatherController{
+@CrossOrigin(origins = "http://localhost:3000")
+public class WeatherControllerImpl implements WeatherController {
 
     @Autowired
     private WeatherService weatherService;
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/weather",produces = "application/json")
-    @Override
-
-    public ResponseEntity<WeatherResponse> getWeatherForecast(@RequestBody  WeatherRequest weatherRequest) {
-        return new ResponseEntity<>(weatherService.getWeatherForCity(weatherRequest), HttpStatus.OK) ;
+    @GetMapping(value = "/weather", produces = "application/json")
+    public ResponseEntity<WeatherResponse> getWeatherForecast(@RequestParam String cityName) {
+        WeatherRequest weatherRequest = new WeatherRequest();
+        weatherRequest.setCity(cityName);
+        return new ResponseEntity<>(weatherService.getWeatherForCity(weatherRequest), HttpStatus.OK);
     }
 }
